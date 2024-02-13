@@ -577,11 +577,9 @@ rgbcolors=(/"(/1., 1., 1/)","(/0., 0., 0/)","(/0.48, 0.77, 0.80/)","(/0.80, 0.2,
 cam5color = "black"
 cam6color = "black"
 
-;fontsize=0.04
-;fontsize=0.018
-;fontsize=0.012
+fontsizeN=0.010
 ;TitSize=0.018
-fontsize=0.010
+fontsize=0.008
 TitSize=0.012; was 0.014
 
 ;*************************************************************
@@ -591,6 +589,7 @@ TitSize=0.012; was 0.014
 wtype = "png"
 wtype@wkWidth  = 2500  ; increase size of pdf image
 wtype@wkHeight = 2500
+fout     = "rrce_vs_lat"
 ;wtype@wkOrientation = "landscape" ; is this only for pdf and ps? 
 wks = gsn_open_wks(wtype,"rrce_vs_lat")           
 ;wks = gsn_open_wks("pdf","rrce_vs_lat")         
@@ -601,6 +600,9 @@ gsn_define_colormap(wks,"cmocean_balance")
 
 lthick    = 3.0
 panlength = 0.17; originally was 0.2
+;pansp     = 0.042; originally was 0.025
+pansp     = 0.062; originally was 0.025
+panx1     = 0.05
 yaxislow  = 0 
 yaxishigh = 80
  
@@ -613,10 +615,8 @@ lgres                      = True
 res@tiMainFontHeightF = TitSize
 ;res@tiYAxisString  = yaxistitle
 ;res@tiYAxisFont    = 21
-res@tiYAxisFontHeightF = fontsize 
-;res@tiXAxisFont    = 21
-res@tiXAxisFontHeightF = fontsize
-
+res@tiYAxisFontHeightF = fontsizeN 
+res@tiXAxisFontHeightF = fontsizeN
 res@tmYLLabelFontHeightF = fontsize 
 res@tmXBLabelFontHeightF = fontsize
 
@@ -626,12 +626,7 @@ res@trXMinF              = -90
 res@trXMaxF              = 0
 
 res@tmXBValues = (/-90.,-60.,-30.,0./)
-;;res@tmXBValues = (/sin(-90./180*PI),sin(-60./180*PI),sin(-30./180*PI),sin(0.)/)
 res@tmXBLabels = (/90,60,30,0/)
-res@tiYAxisFontHeightF     = fontsize 
-res@tiXAxisFontHeightF     = fontsize
-;;res@tmXBMinorValues =sin((/-10.,-20.,-40.,-50.,-70.,-80./)/180.*PI)
-;res@tmXBMinorValues =(/-10.,-20.,-40.,-50.,-70.,-80./)
 
 res@trXReverse = True  ; goal: plot equator at left, increasing to the pole on the right
 
@@ -644,11 +639,8 @@ res@trYMaxF           = yaxishigh
 res@tiMainString      = "PW mean"
 res@tiXAxisString     = "Latitude"
 res@tiYAxisString     = "kg m~S~-2~"
-;res@tiYAxisString     = "kg m^-2"
 
-;res@tiYAxisString  = yaxistitle
-
-res@vpXF              = 0.05
+res@vpXF              = panx1
 res@vpYF              = 0.7
 res@vpWidthF          = panlength 
 res@vpHeightF         = panlength 
@@ -659,25 +651,19 @@ res@xyLineColors = cam6color ; CAM6 color
 res@xyLineThicknessF     = 1.5
 res@xyLineThicknessF     = lthick2(0)
 plot0a=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6a_rce_prw_tzmn_c(:halflat),res)
-;plot0a=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6a_rce_prw_tzmn_c(:halflat),res)
 res@xyDashPattern="0"
 res@xyLineThicknessF     = lthick2(0)
 plot1b=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6a_prw_tzmn_c(:halflat),res)
-;plot1b=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6a_prw_tzmn_c(:halflat),res)
 res@xyDashPattern="16"
 res@xyLineThicknessF     = lthick2(1)
 plot1c=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6b_rce_prw_tzmn_c(:halflat),res)
-;plot1c=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6b_rce_prw_tzmn_c(:halflat),res)
 res@xyDashPattern="0"
 plot1d=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6b_prw_tzmn_c(:halflat),res)
-;plot1d=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6b_prw_tzmn_c(:halflat),res)
 res@xyDashPattern="16"
 res@xyLineThicknessF     = lthick2(2)
 plot1e=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6c_rce_prw_tzmn_c(:halflat),res)
-;plot1e=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6c_rce_prw_tzmn_c(:halflat),res)
 res@xyDashPattern="0"
 plot1f=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6c_prw_tzmn_c(:halflat),res)
-;plot1f=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6c_prw_tzmn_c(:halflat),res)
 
 overlay(plot0a,plot1b)
 overlay(plot0a,plot1c)
@@ -697,10 +683,8 @@ res2@gsnFrame               = False
 ;res2@tiYAxisFont    = 21
 ;res2@tiXAxisFont    = 21
 res2@tiMainFontHeightF = TitSize
-;res2@tiYAxisString  = yaxistitle
-res2@tiYAxisFontHeightF = fontsize 
-res2@tiXAxisFontHeightF = fontsize
-
+res2@tiYAxisFontHeightF = fontsizeN 
+res2@tiXAxisFontHeightF = fontsizeN
 res2@tmYLLabelFontHeightF = fontsize 
 res2@tmXBLabelFontHeightF = fontsize
 
@@ -709,45 +693,23 @@ res2@tmXBMode = "explicit"
 res2@trXMinF = -90
 res2@trXMaxF = 0
 
-;; these 4 lines should be uncommented.  this is a test.
-;;res2@tmXBValues = (/sin(-90./180*PI),sin(-60./180*PI),sin(-30./180*PI),sin(0.)/)
 res2@tmXBLabels = (/90,60,30,0/)
-res2@tiYAxisFontHeightF     = fontsize 
-res2@tiXAxisFontHeightF     = fontsize
-;;res2@tmXBMinorValues =sin((/-10.,-20.,-40.,-50.,-70.,-80./)/180.*PI)
-;res2@tmXBMinorValues =(/-10.,-20.,-40.,-50.,-70.,-80./)
 res2@trXReverse = True  ; goal: plot equator at left, increasing to the pole on the right
 
-;res2@tmXBValues = (/-90.,-60,-30,0./)
-;res2@tmXBLabels = (/90,60,30,0/)
-;res2@trXReverse = True  ; goal: plot equator at left, increasing to the pole on the right
-;res2@tmXBValues             = (/0, 30, 60, 90/)
-;res2@tmXBLabels             = (/0,30,60,90/)
-;res7@tmXBMinorValues        = sin((/-10.,-20.,-40.,-50.,-70.,-80./)/180.*PI)
-
 ; plot climatology first
-res2@trYMinF = yaxislow 
-res2@trYMaxF = yaxishigh 
-res2@tiMainString = "PW anomaly"
-res2@tiXAxisString  = "Latitude"
-res2@tiYAxisString  = "kg m^-2"
-
-;yaxislow  = 0 
-;yaxishigh = 80
-
-;res2@tiYAxisString  = "kg m^-2"
-
 yaxislow  = -10 
 yaxishigh = 10
 res2@trYMinF = yaxislow 
 res2@trYMaxF = yaxishigh 
-;res2@xyDashPattern="1"
+res2@tiMainString = "PW anomaly"
+
+
+
 res2@xyLineThicknessF     = 1.5
-;res2@tiYAxisString  = yaxistitle
 res2@tiXAxisString  = "Latitude"
 res2@tiYAxisString  = "kg m~S~-2~"
 
-res2@vpXF           = 0.275
+res2@vpXF           = panx1+panlength+pansp ; 0.275
 res2@vpYF           = 0.7
 res2@vpWidthF       = panlength 
 res2@vpHeightF      = panlength 
@@ -756,24 +718,18 @@ res2@xyDashPattern="16"
 res2@xyLineColors = cam6color 
 res2@xyLineThicknessF     = lthick2(0)
 plot2a=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6a_rce_prw_anom_c(:halflat),res2)
-;plot2a=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6a_rce_prw_anom_c(:halflat),res2)
 res2@xyDashPattern="0"
 plot3b=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6a_prw_anom_c(:halflat),res2)
-;plot3b=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6a_prw_anom_c(:halflat),res2)
 res2@xyDashPattern="16"
 res2@xyLineThicknessF     = lthick2(1)
 plot3c=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6b_rce_prw_anom_c(:halflat),res2)
-;plot3c=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6b_rce_prw_anom_c(:halflat),res2)
 res2@xyDashPattern="0"
 plot3d=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6b_prw_anom_c(:halflat),res2)
-;plot3d=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6b_prw_anom_c(:halflat),res2)
 res2@xyDashPattern="16"
 res2@xyLineThicknessF     = lthick2(2)
 plot3e=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6c_rce_prw_anom_c(:halflat),res2)
-;plot3e=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6c_rce_prw_anom_c(:halflat),res2)
 res2@xyDashPattern="0"
 plot3f=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6c_prw_anom_c(:halflat),res2)
-;plot3f=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6c_prw_anom_c(:halflat),res2)
 
 overlay(plot2a,plot3b)
 overlay(plot2a,plot3c)
@@ -798,9 +754,8 @@ res3@tiXAxisString          = "Latitude"
 
 res3@tiMainFontHeightF      = TitSize
 ;res2@tiYAxisString          = yaxistitle
-res3@tiYAxisFontHeightF     = fontsize 
-res3@tiXAxisFontHeightF     = fontsize
-
+res3@tiYAxisFontHeightF     = fontsizeN 
+res3@tiXAxisFontHeightF     = fontsizeN
 res3@tmYLLabelFontHeightF   = fontsize 
 res3@tmXBLabelFontHeightF   = fontsize
 
@@ -809,42 +764,28 @@ res3@tmXBMode               = "explicit"
 res3@trXMinF                = -90
 res3@trXMaxF                = 0
 
-;res3@tmXBValues = (/sin(-90./180*PI),sin(-60./180*PI),sin(-30./180*PI),sin(0.)/)
 res3@tmXBValues = (/-90.,-60.,-30.,0./)
 res3@tmXBLabels = (/90,60,30,0/)
-;res3@tmXBMinorValues =sin((/-10.,-20.,-40.,-50.,-70.,-80./)/180.*PI)
 res3@trXReverse = True  ; goal: plot equator at left, increasing to the pole on the right
-res3@tiYAxisFontHeightF     = fontsize 
-res3@tiXAxisFontHeightF     = fontsize
 
-res3@vpXF           = 0.5
+res3@vpXF           = panx1+panlength+pansp+panlength+pansp;  0.5
 res3@vpYF           = 0.7
 res3@vpWidthF       = panlength 
 res3@vpHeightF      = panlength 
 
-res3@xyDashPattern="0"
+res3@xyDashPattern        ="0"
 res3@xyLineThicknessF     = 1.5
 res3@xyLineColors = cam5color ; CAM5 color
-
-; c6c_tc_prw_tzmn_c
 
 res3@xyDashPattern="0"
 res3@xyLineThicknessF     = lthick2(0)
 res3@xyLineColors = cam6color ; CAM6 color
-;plot5a=gsn_csm_xy(wks,sin(latitude_c6(:)/180*PI),scale*c6a_prw_tzmn(:),res3)
-;
-;
 plot5a=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6a_tc_prw_tzmn_c(:halflat),res3)
-;plot5a=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6a_tc_prw_tzmn_c(:halflat),res3)
-;
-;
 res3@xyDashPattern="0"
 res3@xyLineThicknessF     = lthick2(1)
-;plot5b=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6b_tc_prw_tzmn_c(:halflat),res3)
 plot5b=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6b_tc_prw_tzmn_c(:halflat),res3)
 res3@xyDashPattern="0"
 res3@xyLineThicknessF     = lthick2(2)
-;plot5c=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6c_tc_prw_tzmn_c(:halflat),res3)
 plot5c=gsn_csm_xy(wks,latitude_c6(:halflat),scale*c6c_tc_prw_tzmn_c(:halflat),res3)
 
 overlay(plot5a,plot5b)
@@ -854,82 +795,56 @@ overlay(plot5a,plot5c)
 ; begin fourth panel -----------------------------------------------------------------------------------
 ; plot Precipitation minus Evaporation 
 ;--------------------------------------------------
+scalef=1e6
+
 res4                        = True
 res4@gsnFrame               = False
 
-;res4@trYMinF = 0 
-;res4@trYMaxF = 30 
 res4@tiMainString = "P - E"
-;res4@tiYAxisString  = "kg m-2 s-1"
 res4@tiYAxisString  = "kg m~S~-2~N~s~S~-1~N~"
 res4@tiXAxisString  = "Latitude"
 
 res4@tiMainFontHeightF = TitSize
-;res2@tiYAxisString  = yaxistitle
-res4@tiYAxisFontHeightF = fontsize 
-res4@tiXAxisFontHeightF = fontsize
-
+res4@tiYAxisFontHeightF = fontsizeN 
+res4@tiXAxisFontHeightF = fontsizeN
 res4@tmYLLabelFontHeightF = fontsize 
 res4@tmXBLabelFontHeightF = fontsize
 
-;res4@xyLineThicknessF     = lthick
-res4@tmXBMode = "explicit"
-res4@trXMinF = -90
-res4@trXMaxF = 0
-res4@trYMinF = -10
-res4@trYMaxF = 10
+res4@tmXBMode               = "explicit"
+res4@trXMinF                = -90
+res4@trXMaxF                = 0
+res4@trYMinF                = -10
+res4@trYMaxF                = 10
 
-;res4@tmXBValues = (/sin(-90./180*PI),sin(-60./180*PI),sin(-30./180*PI),sin(0.)/)
-res4@tmXBValues = (/-90,-60,-30,0/)
-res4@tmXBLabels = (/90,60,30,0/)
-;res4@tmXBMinorValues =(/-10.,-20.,-40.,-50.,-70.,-80./)
-;res4@tmXBMinorValues =sin((/-10.,-20.,-40.,-50.,-70.,-80./)/180.*PI)
-res4@trXReverse = True  ; goal: plot equator at left, increasing to the pole on the right
-res4@tiYAxisFontHeightF     = fontsize 
-res4@tiXAxisFontHeightF     = fontsize
+res4@tmXBValues             = (/-90,-60,-30,0/)
+res4@tmXBLabels             = (/90,60,30,0/)
+res4@tmXMajorGrid           = True
+res4@tmYMajorGrid           = True
 
-res4@vpXF           = 0.05
-res4@vpYF           = 0.43
-res4@vpWidthF       = panlength 
-res4@vpHeightF      = panlength 
+res4@trXReverse             = True  ; plot equator at left 
 
-res4@xyDashPattern="0"
-res4@xyLineThicknessF     = 1.5
-res4@xyLineColors = cam5color ; CAM5 color
+;res4@vpXF                   = 0.05
+res4@vpXF                   = panx1
+res4@vpYF                   = 0.43
+res4@vpWidthF               = panlength 
+res4@vpHeightF              = panlength 
 
-; c6c_tc_prw_tzmn_c
+res4@xyDashPattern          ="0"
+res4@xyLineThicknessF       = 1.5
+res4@xyLineColors           = cam5color ; CAM5 color
 
-scalef=1e6
 res4@xyDashPattern="0"
 res4@xyLineThicknessF     = lthick2(0)
 res4@xyLineColors = cam6color ; CAM6 color
-;plot5a=gsn_csm_xy(wks,sin(latitude_c6(:)/180*PI),scale*c6a_prw_tzmn(:),res4)
-;
-;
 plot6a=gsn_csm_xy(wks,latitude_c6(:halflat),scalef*PminusE(0,:halflat),res4)
-;plot6a=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scalef*PminusE(0,:halflat),res4)
 res4@xyLineThicknessF     = lthick2(1)
 plot6b=gsn_csm_xy(wks,latitude_c6(:halflat),scalef*PminusE(1,:halflat),res4)
-;plot6b=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scalef*PminusE(1,:halflat),res4)
 res4@xyLineThicknessF     = lthick2(2)
 plot6c=gsn_csm_xy(wks,latitude_c6(:halflat),scalef*PminusE(2,:halflat),res4)
-;plot6c=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scalef*PminusE(2,:halflat),res4)
-;res4@xyDashPattern="16"
-;res4@xyLineThicknessF     = lthick2(0)
-;plot6d=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scalef*PminusE(3,:halflat),res4)
-;res4@xyLineThicknessF     = lthick2(1)
-;plot6e=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scalef*PminusE(4,:halflat),res4)
-;res4@xyLineThicknessF     = lthick2(2) 
-;plot6f=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scalef*PminusE(5,:halflat),res4)
 
 overlay(plot6a,plot6b)
 overlay(plot6a,plot6c)
-;overlay(plot6a,plot6d)
-;overlay(plot6a,plot6e)
-;overlay(plot6a,plot6f)
 
-;plot(2)=plot5a
-;;
 ;; begin fifth panel -----------------------------------------------------------------------------------
 ;; plot Precipitation minus Evaporation 
 ;;--------------------------------------------------
@@ -1006,12 +921,7 @@ res6@tmYLMode               = "Explicit"
 res6@tmXBMode               = "Explicit"
 res6@tmXBValues             = (/90,60,30,0/)
 res6@tmXBLabels             = (/90,60,30,0/)
-res6@trXReverse             = True     ; reverse the y-axis
-;;res6@tmXBValues             = (/sin(-90./180*PI),sin(-60./180*PI),sin(-30./180*PI),sin(0.)/)
-;;res6@tmXBValues             = (/sin(90./180*PI),sin(60./180*PI),sin(30./180*PI),sin(0.)/)
-;res6@tmXBValues             = (/sin(0./180*PI),sin(30./180*PI),sin(60./180*PI),sin(90.)/)
-;res6@tmXBLabels             = (/90,60,30,0/)
-;;res6@tmXBMinorValues        = sin((/-10.,-20.,-40.,-50.,-70.,-80./)/180.*PI)
+;res6@trXReverse             = True     ; reverse the y-axis
 ;res6@tmXBMinorValues        = sin((/10.,20.,40.,50.,70.,80./)/180.*PI)
 res6@tmYLValues             = (/100,200,400,600,800,1000/)
 res6@tmYLLabels             = (/"100","200","400","600","800","1000"/)
@@ -1036,27 +946,17 @@ res6@cnFillOn               = True              ; color plot desired
 
 res6@tiMainString           = "T anomaly" 
 res6@tiMainFontHeightF      = TitSize                               ; font height
-;  printVarSummary(var_to_plot2); 30x192
-;  printVarSummary(temp_prof) ; 30x192
-;  print("temp_prof: "+temp_prof(:,45))
 
 ;res6@vpXF              = 0.5
 ;res6@vpYF              = 0.43
-res6@vpXF           = 0.275
-res6@vpYF           = 0.43
-res6@vpWidthF          = panlength 
-res6@vpHeightF         = panlength 
+res6@vpXF                   = panx1+panlength+pansp;  
+;res6@vpXF                   = 0.275
+res6@vpYF                   = 0.43
+res6@vpWidthF               = panlength 
+res6@vpHeightF              = panlength 
 
-;temp_1hem
-;  print("%^&%^&%^& blah blah blah 4567456745674567")
-;  print(temp_1hem(12,:))
-;  print("%^&%^&%^& blah blah blah 4567456745674567")
-;  print(temp_1hem(:,12))
-;  print("%^&%^&%^& blah blah blah 4567456745674567")
 ;
 contour3 = gsn_csm_contour(wks,temp_1hem(:,:),res6)  ; create the plot
-;contour3 = gsn_csm_contour(wks,temp_prof(:,:),res6)  ; create the plot
-;plot5c=gsn_csm_xy(wks,sin(latitude_c6(:halflat)/180*PI),scale*c6c_tc_prw_tzmn_c(:halflat),res5)
 
 ; begin sixth panel -------------------------------------------------------------------------------
 res7                        = True
@@ -1071,27 +971,19 @@ res7@tmYLMode               = "Explicit"
 res7@tmYLValues             = (/100,200,400,600,800,1000/)
 res7@tmYLLabels             = (/"100","200","400","600","800","1000"/)
 res7@tmXBMode               = "Explicit"
-;res7@trXMaxF                = 0.99
-;res7@trXMinF                = 0.001
-;res7@tmXBValues             = (/sin(-90./180*PI),sin(-60./180*PI),sin(-30./180*PI),sin(0.)/)
-;res7@tmXBValues             = (/sin(90./180*PI),sin(60./180*PI),sin(30./180*PI),sin(0.)/)
-;res7@tmXBValues             = (/sin(0.001/180*PI),sin(30./180*PI),sin(60./180*PI),sin(89./180*PI)/)
 res7@tmXBValues             = (/90,60,30,0/)
 res7@tmXBLabels             = (/90,60,30,0/)
 
-;res4@tmXBValues = (/sin(-90./180*PI),sin(-60./180*PI),sin(-30./180*PI),sin(0.)/)
-;res4@tmXBLabels = (/90,60,30,0/)
-;res4@tmXBMinorValues =sin((/-10.,-20.,-40.,-50.,-70.,-80./)/180.*PI)
-
-;res7@tmXBMinorValues        = sin((/-10.,-20.,-40.,-50.,-70.,-80./)/180.*PI)
 ;res7@tmXBMinorValues        = sin((/10.,20.,40.,50.,70.,80./)/180.*PI)
 res7@trYReverse             = True     ; reverse the y-axis
 res7@gsnYAxisIrregular2Log  = True
 res7@trYMaxF                = 1000. 
 res7@trYMinF                = 100.
 res7@tiYAxisString          = "pressure (hPa)"
-res7@tiYAxisFontHeightF     = fontsize 
-res7@tiXAxisFontHeightF     = fontsize
+res7@tiYAxisFontHeightF     = fontsizeN
+res7@tiXAxisFontHeightF     = fontsizeN
+res7@tmYLLabelFontHeightF   = fontsize 
+res7@tmXBLabelFontHeightF   = fontsize
 res7@lbTitleOn              = True 
 res7@lbTitlePosition        = "Right"
 res7@lbTitleDirection       = "Across"
@@ -1102,15 +994,14 @@ res7@cnFillOn               = True              ; color plot desired
 
 ;res7@vpXF                   = 0.725
 ;res7@vpYF                   = 0.43
-res7@vpXF                   = 0.5
+;res7@vpXF                   = 0.5
+res7@vpXF           = panx1+panlength+pansp+panlength+pansp; 
 res7@vpYF                   = 0.43
 res7@vpWidthF               = panlength
 res7@vpHeightF              = panlength 
 
 ;uznm_1hem
 contour4 = gsn_csm_contour(wks,uznm_1hem(:,:),res7)  ; create the plot
-;contour4 = gsn_csm_contour(wks,sin(latitude_c6(:halflat)/180*PI),uznm_1hem(:halflat,:),res7)
-;contour4 = gsn_csm_contour(wks,var_to_plot2(:,:),res7)  ; create the plot
 
 ;plot(3) = contour3
 
@@ -1139,43 +1030,9 @@ draw((/plot0a,plot2a,plot5a,plot6a,contour3,contour4/))
 ;draw((/plot0a,plot2a,plot5a,plot6a,plot7a,contour3,contour4/))
 frame(wks)
 
-end 
+trimPNG(fout)
 
-;trimPNG(rrce_vs_lat)
-
-;; the code below was written by Walter Hannah, to trim the extra 
-;; space around a png figure.  
-;; https://hannahlab.org/ncl-cropping-the-white-space-from-a-png-file/
-;; 
-;; copied in November, 2023
-;;=======================================================================
-;;=======================================================================
-;undef("trimPNG")
-;procedure trimPNG(fig_file)
-;local res,cmd
-;begin
-;    strver = systemfunc("ncl -V") 
-;    ver = tofloat(strver)
-;    sub = str_sub_str(strver,ver+".","")
-;    if .not.isStrSubset(fig_file,".png") then 
-;        fig_file = fig_file + ".png" 
-;    end if
-;    cmd = "convert -trim "+fig_file+" "+fig_file
-;    if (ver.ge.6.2) .or. ((ver.eq.6.2).and.(sub.ge.1)) then
-;        if fileexists(fig_file) then system(cmd) end if
-;    else
-;        if isfilepresent(fig_file) then system(cmd) end if
-;    end if
-;    print("")
-;    print("    "+fig_file)
-;    print("")
-;end
-;;=======================================================================
-;;=======================================================================
-;  
-;trimPNG(rrce_vs_lat)
-
-;end
+end
 
 
 
